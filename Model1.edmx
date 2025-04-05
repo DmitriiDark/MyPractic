@@ -1,0 +1,737 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище SHADRINModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="category1" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "SHADRIN.dbo.DAYSE" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="DAYSE">
+          <Key>
+            <PropertyRef Name="number1" />
+          </Key>
+          <Property Name="number1" Type="int" Nullable="false" />
+          <Property Name="date_of_entry" Type="date" />
+          <Property Name="departure_date" Type="date" />
+          <Property Name="days" Type="int" />
+        </EntityType>
+        <EntityType Name="Floors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Floor_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Guests">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="number1" Type="int" Nullable="false" />
+          <Property Name="client" Type="int" Nullable="false" />
+          <Property Name="date_of_entry" Type="date" />
+          <Property Name="departure_date" Type="date" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="role1" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Room_status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="name_status" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Room_stock">
+          <Key>
+            <PropertyRef Name="number" />
+          </Key>
+          <Property Name="number" Type="int" Nullable="false" />
+          <Property Name="category2" Type="int" Nullable="false" />
+          <Property Name="floor" Type="int" Nullable="false" />
+          <Property Name="status" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="surname" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="otchestvo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="role2" Type="int" Nullable="false" />
+          <Property Name="login" Type="nvarchar" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+          <Property Name="count" Type="int" />
+          <Property Name="active" Type="bit" Nullable="false" />
+          <Property Name="date" Type="date" />
+        </EntityType>
+        <EntityType Name="Zakaz">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="number" Type="int" />
+          <Property Name="client" Type="int" />
+          <Property Name="days" Type="int" />
+          <Property Name="Price" Type="nvarchar" MaxLength="50" />
+          <Property Name="guest" Type="int" />
+        </EntityType>
+        <Association Name="FK_Guests_Room_stock">
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_stock">
+              <PropertyRef Name="number" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="number1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="role2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Guests">
+          <End Role="Guests" Type="Self.Guests" Multiplicity="0..1" />
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guests">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Room_stock">
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="0..1" />
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_stock">
+              <PropertyRef Name="number" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Номерной фонд_Категория номера">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="category2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Номерной фонд_Статус номера">
+          <End Role="Room_status" Type="Self.Room_status" Multiplicity="0..1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Номерной фонд_Этажи">
+          <End Role="Floors" Type="Self.Floors" Multiplicity="1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="floor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="Col14" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float" />
+        <Function Name="Dni" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="Date_of_entry" Type="date" Mode="In" />
+          <Parameter Name="Departure_date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="Dni5" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="Date_of_entry" Type="date" Mode="In" />
+          <Parameter Name="Departure_date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="Хранилище SHADRINModelContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Floors" EntityType="Self.Floors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Guests" EntityType="Self.Guests" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Room_status" EntityType="Self.Room_status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Room_stock" EntityType="Self.Room_stock" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Zakaz" EntityType="Self.Zakaz" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DAYSE" EntityType="Self.DAYSE" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[DAYSE].[number1] AS [number1], 
+[DAYSE].[date_of_entry] AS [date_of_entry], 
+[DAYSE].[departure_date] AS [departure_date], 
+[DAYSE].[days] AS [days]
+FROM [dbo].[DAYSE] AS [DAYSE]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Guests_Room_stock" Association="Self.FK_Guests_Room_stock">
+            <End Role="Room_stock" EntitySet="Room_stock" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Users" Association="Self.FK_Guests_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Role" Association="Self.FK_Users_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Guests" Association="Self.FK_Zakaz_Guests">
+            <End Role="Guests" EntitySet="Guests" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Room_stock" Association="Self.FK_Zakaz_Room_stock">
+            <End Role="Room_stock" EntitySet="Room_stock" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Номерной фонд_Категория номера" Association="Self.FK_Номерной фонд_Категория номера">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Номерной фонд_Статус номера" Association="Self.FK_Номерной фонд_Статус номера">
+            <End Role="Room_status" EntitySet="Room_status" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Номерной фонд_Этажи" Association="Self.FK_Номерной фонд_Этажи">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SHADRINModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="category1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Room_stock" Relationship="Self.FK_Номерной_фонд_Категория_номера" FromRole="Category" ToRole="Room_stock" />
+        </EntityType>
+        <EntityType Name="Floors">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Floor_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Room_stock" Relationship="Self.FK_Номерной_фонд_Этажи" FromRole="Floors" ToRole="Room_stock" />
+        </EntityType>
+        <EntityType Name="Guests">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="number1" Type="Int32" Nullable="false" />
+          <Property Name="client" Type="Int32" Nullable="false" />
+          <Property Name="date_of_entry" Type="DateTime" Precision="0" />
+          <Property Name="departure_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Room_stock" Relationship="Self.FK_Guests_Room_stock" FromRole="Guests" ToRole="Room_stock" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Guests_Users" FromRole="Guests" ToRole="Users" />
+          <NavigationProperty Name="Zakaz" Relationship="Self.FK_Zakaz_Guests" FromRole="Guests" ToRole="Zakaz" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="role1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Users_Role" FromRole="Role" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Room_status">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="name_status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Room_stock" Relationship="Self.FK_Номерной_фонд_Статус_номера" FromRole="Room_status" ToRole="Room_stock" />
+        </EntityType>
+        <EntityType Name="Room_stock">
+          <Key>
+            <PropertyRef Name="number" />
+          </Key>
+          <Property Name="number" Type="Int32" Nullable="false" />
+          <Property Name="category2" Type="Int32" Nullable="false" />
+          <Property Name="floor" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="Int32" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Номерной_фонд_Категория_номера" FromRole="Room_stock" ToRole="Category" />
+          <NavigationProperty Name="Floors" Relationship="Self.FK_Номерной_фонд_Этажи" FromRole="Room_stock" ToRole="Floors" />
+          <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_Room_stock" FromRole="Room_stock" ToRole="Guests" />
+          <NavigationProperty Name="Room_status" Relationship="Self.FK_Номерной_фонд_Статус_номера" FromRole="Room_stock" ToRole="Room_status" />
+          <NavigationProperty Name="Zakaz" Relationship="Self.FK_Zakaz_Room_stock" FromRole="Room_stock" ToRole="Zakaz" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="otchestvo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="role2" Type="Int32" Nullable="false" />
+          <Property Name="login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="count" Type="Int32" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <Property Name="date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Guests" Relationship="Self.FK_Guests_Users" FromRole="Users" ToRole="Guests" />
+          <NavigationProperty Name="Role" Relationship="Self.FK_Users_Role" FromRole="Users" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="Zakaz">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="number" Type="Int32" />
+          <Property Name="client" Type="Int32" />
+          <Property Name="days" Type="Int32" />
+          <Property Name="Price" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Guests" Relationship="Self.FK_Zakaz_Guests" FromRole="Zakaz" ToRole="Guests" />
+          <NavigationProperty Name="Room_stock" Relationship="Self.FK_Zakaz_Room_stock" FromRole="Zakaz" ToRole="Room_stock" />
+          <Property Name="guest" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DAYSE">
+          <Key>
+            <PropertyRef Name="number1" />
+          </Key>
+          <Property Name="number1" Type="Int32" Nullable="false" />
+          <Property Name="date_of_entry" Type="DateTime" Precision="0" />
+          <Property Name="departure_date" Type="DateTime" Precision="0" />
+          <Property Name="days" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_Номерной_фонд_Категория_номера">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="category2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Номерной_фонд_Этажи">
+          <End Role="Floors" Type="Self.Floors" Multiplicity="1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Floors">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="floor" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Room_stock">
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_stock">
+              <PropertyRef Name="number" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="number1" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Guests_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Guests" Type="Self.Guests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Guests">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Guests">
+          <End Role="Guests" Type="Self.Guests" Multiplicity="0..1" />
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Guests">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="client" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Role">
+          <End Role="Role" Type="Self.Role" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="role2" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Номерной_фонд_Статус_номера">
+          <End Role="Room_status" Type="Self.Room_status" Multiplicity="0..1" />
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_status">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Room_stock">
+              <PropertyRef Name="status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Zakaz_Room_stock">
+          <End Role="Room_stock" Type="Self.Room_stock" Multiplicity="0..1" />
+          <End Role="Zakaz" Type="Self.Zakaz" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Room_stock">
+              <PropertyRef Name="number" />
+            </Principal>
+            <Dependent Role="Zakaz">
+              <PropertyRef Name="number" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SHADRINEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Category" EntityType="Self.Category" />
+          <EntitySet Name="Floors" EntityType="Self.Floors" />
+          <EntitySet Name="Guests" EntityType="Self.Guests" />
+          <EntitySet Name="Role" EntityType="Self.Role" />
+          <EntitySet Name="Room_status" EntityType="Self.Room_status" />
+          <EntitySet Name="Room_stock" EntityType="Self.Room_stock" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <EntitySet Name="Zakaz" EntityType="Self.Zakaz" />
+          <EntitySet Name="DAYSE" EntityType="Self.DAYSE" />
+          <AssociationSet Name="FK_Номерной_фонд_Категория_номера" Association="Self.FK_Номерной_фонд_Категория_номера">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Номерной_фонд_Этажи" Association="Self.FK_Номерной_фонд_Этажи">
+            <End Role="Floors" EntitySet="Floors" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Room_stock" Association="Self.FK_Guests_Room_stock">
+            <End Role="Room_stock" EntitySet="Room_stock" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Guests_Users" Association="Self.FK_Guests_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Guests" EntitySet="Guests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Guests" Association="Self.FK_Zakaz_Guests">
+            <End Role="Guests" EntitySet="Guests" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Role" Association="Self.FK_Users_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Номерной_фонд_Статус_номера" Association="Self.FK_Номерной_фонд_Статус_номера">
+            <End Role="Room_status" EntitySet="Room_status" />
+            <End Role="Room_stock" EntitySet="Room_stock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Zakaz_Room_stock" Association="Self.FK_Zakaz_Room_stock">
+            <End Role="Room_stock" EntitySet="Room_stock" />
+            <End Role="Zakaz" EntitySet="Zakaz" />
+          </AssociationSet>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(SHADRINModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(SHADRINModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище SHADRINModelContainer" CdmEntityContainer="SHADRINEntities">
+          <EntitySetMapping Name="Category">
+            <EntityTypeMapping TypeName="SHADRINModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="category1" ColumnName="category1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Floors">
+            <EntityTypeMapping TypeName="SHADRINModel.Floors">
+              <MappingFragment StoreEntitySet="Floors">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Floor_name" ColumnName="Floor_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Guests">
+            <EntityTypeMapping TypeName="SHADRINModel.Guests">
+              <MappingFragment StoreEntitySet="Guests">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="number1" ColumnName="number1" />
+                <ScalarProperty Name="client" ColumnName="client" />
+                <ScalarProperty Name="date_of_entry" ColumnName="date_of_entry" />
+                <ScalarProperty Name="departure_date" ColumnName="departure_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Role">
+            <EntityTypeMapping TypeName="SHADRINModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="role1" ColumnName="role1" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Room_status">
+            <EntityTypeMapping TypeName="SHADRINModel.Room_status">
+              <MappingFragment StoreEntitySet="Room_status">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="name_status" ColumnName="name_status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Room_stock">
+            <EntityTypeMapping TypeName="SHADRINModel.Room_stock">
+              <MappingFragment StoreEntitySet="Room_stock">
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="category2" ColumnName="category2" />
+                <ScalarProperty Name="floor" ColumnName="floor" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="SHADRINModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="SHADRINModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="surname" ColumnName="surname" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="otchestvo" ColumnName="otchestvo" />
+                <ScalarProperty Name="role2" ColumnName="role2" />
+                <ScalarProperty Name="login" ColumnName="login" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="count" ColumnName="count" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="date" ColumnName="date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Zakaz">
+            <EntityTypeMapping TypeName="SHADRINModel.Zakaz">
+              <MappingFragment StoreEntitySet="Zakaz">
+                <ScalarProperty Name="guest" ColumnName="guest" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="number" ColumnName="number" />
+                <ScalarProperty Name="client" ColumnName="client" />
+                <ScalarProperty Name="days" ColumnName="days" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DAYSE">
+            <EntityTypeMapping TypeName="SHADRINModel.DAYSE">
+              <MappingFragment StoreEntitySet="DAYSE">
+                <ScalarProperty Name="number1" ColumnName="number1" />
+                <ScalarProperty Name="date_of_entry" ColumnName="date_of_entry" />
+                <ScalarProperty Name="departure_date" ColumnName="departure_date" />
+                <ScalarProperty Name="days" ColumnName="days" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="Хранилище SHADRINModel.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="Хранилище SHADRINModel.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="Хранилище SHADRINModel.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="Хранилище SHADRINModel.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SHADRINModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="Хранилище SHADRINModel.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="SHADRINModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="Хранилище SHADRINModel.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="Хранилище SHADRINModel.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

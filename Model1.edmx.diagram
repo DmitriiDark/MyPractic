@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7c1b2fd5c3ea449ca0c5437db48ab683" Name="Diagram1">
+        <EntityTypeShape EntityType="SHADRINModel.Category" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Floors" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Guests" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Role" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Room_status" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Room_stock" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Users" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.Zakaz" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SHADRINModel.DAYSE" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
+        <AssociationConnector Association="SHADRINModel.FK_Номерной_фонд_Категория_номера" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Номерной_фонд_Этажи" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Guests_Room_stock" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Guests_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Zakaz_Guests" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Users_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Номерной_фонд_Статус_номера" ManuallyRouted="false" />
+        <AssociationConnector Association="SHADRINModel.FK_Zakaz_Room_stock" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
